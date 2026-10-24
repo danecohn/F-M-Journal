@@ -1,0 +1,10 @@
+node_modules/
+dist/
+data/
+release/
+build/
+.env
+*.log
+*.p12
+*.key
+.DS_Store

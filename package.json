@@ -1,0 +1,81 @@
+{
+  "name": "fm-journal",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Food, mood, and the rhythm of your day. By AltStack and Dane Cohn.",
+  "author": "AltStack and Dane Cohn",
+  "license": "AGPL-3.0-only",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build && node scripts/offline.mjs",
+    "start": "node server/index.mjs",
+    "test": "node --test test/*.test.mjs",
+    "desktop": "electron desktop/main.cjs",
+    "dist": "electron-builder",
+    "icons": "node scripts/icons.mjs"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "lucide-react": "^0.468.0",
+    "express": "^5.1.0",
+    "exceljs": "^4.4.0"
+  },
+  "devDependencies": {
+    "vite": "^7.1.0",
+    "electron": "44.9.2",
+    "electron-builder": "26.15.3",
+    "sharp": "^0.34.0",
+    "png-to-ico": "^3.0.1"
+  },
+  "build": {
+    "appId": "org.altstack.fmjournal",
+    "productName": "F&M Journal",
+    "artifactName": "FMJournal-${os}-${arch}.${ext}",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**",
+      "desktop/**",
+      "server/**",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "server/**"
+    ],
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.healthcare-fitness",
+      "icon": "build/icon.icns",
+      "hardenedRuntime": true,
+      "entitlements": "desktop/entitlements.mac.plist",
+      "entitlementsInherit": "desktop/entitlements.mac.plist",
+      "notarize": true
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Office",
+      "icon": "build/icon.png",
+      "maintainer": "AltStack and Dane Cohn",
+      "executableName": "fm-journal"
+    }
+  }
+}
