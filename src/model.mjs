@@ -17,4 +17,16 @@ export function demo(){const j=empty();j.settings.name='Alex';for(let n=0;n<14;n
  if(n>0){make('food','12:30',{title:'Lunch, away from my screen',foods:'Roasted vegetables, rice and chicken',water:350,mood:4,energy:3});make('digestion','14:00',{title:'Afternoon check-in',digestion:'Comfortable',bristol:4});make('mood','19:00',{title:'Winding down',mood:n%2+3,energy:3,moodNotes:'A full day. Feeling settled.'});}}
  return j;}
 export function trend(journal,days=7){const now=new Date();return Array.from({length:days},(_,i)=>{const d=new Date(now);d.setDate(d.getDate()-(days-i-1));const date=dayKey(d);return {date,label:d.toLocaleDateString(undefined,{weekday:'short'}),...stats(journal.entries.filter(e=>e.date===date),journal.days[date])};});}
-export function safeJournal(v){if(!v||!Array.isArray(v.entries)||v.entries.length>20000||!v.days||!Array.isArray(v.templates)||!v.settings)throw Error('This is not an F&M Journal backup.');for(const e of v.entries)if(!e.id||!/^\d{4}-\d{2}-\d{2}$/.test(e.date)||!types[e.type])throw Error('The backup contains invalid entries.');return v;}
+export function safeJournal(v){
+ if(!v||!Array.isArray(v.entries)||v.entries.length>20000||!v.days||Array.isArray(v.days)||!Array.isArray(v.templates)||v.templates.length>200||!v.settings)throw Error('This is not an F&M Journal backup.');
+ if(typeof v.settings.name!=='string'||v.settings.name.length>100||!Number.isFinite(v.settings.waterGoal)||v.settings.waterGoal<250||v.settings.waterGoal>10000||!['dark','light'].includes(v.settings.theme))throw Error('The backup has invalid preferences.');
+ const ids=new Set();for(const e of v.entries){
+  if(!e||typeof e.id!=='string'||ids.has(e.id)||!/^\d{4}-\d{2}-\d{2}$/.test(e.date)||!types[e.type])throw Error('The backup contains invalid or duplicate entries.');ids.add(e.id);
+  for(const k of ['title','foods','drinks','supplements','moodNotes','movement','digestion','notes','time','originalTime'])if(e[k]!==undefined&&(typeof e[k]!=='string'||e[k].length>12000))throw Error('Invalid entry text in the backup.');
+  if(e.tags!==undefined&&(!Array.isArray(e.tags)||e.tags.some(t=>typeof t!=='string')))throw Error('Invalid entry tags in the backup.');
+  for(const k of ['mood','energy','hunger','fullness'])if(e[k]!=null&&(!Number.isFinite(e[k])||e[k]<1||e[k]>5))throw Error('Invalid rating in the backup.');
+ }
+ for(const e of v.templates)if(!e||typeof e.id!=='string'||!types[e.type]||['title','foods','drinks','supplements','moodNotes','movement','digestion'].some(k=>e[k]!==undefined&&typeof e[k]!=='string')||e.tags!==undefined&&(!Array.isArray(e.tags)||e.tags.some(t=>typeof t!=='string')))throw Error('Invalid saved entry in the backup.');
+ for(const d of Object.values(v.days))if(!d||typeof d!=='object'||['wake','sleep','reflection'].some(k=>d[k]!==undefined&&typeof d[k]!=='string'))throw Error('Invalid daily rhythm in the backup.');
+ return v;
+}
