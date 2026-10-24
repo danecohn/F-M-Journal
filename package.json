@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "main": "desktop/main.cjs",
   "description": "Food, mood, and the rhythm of your day. By AltStack and Dane Cohn.",
   "author": "AltStack and Dane Cohn",
   "license": "AGPL-3.0-only",
