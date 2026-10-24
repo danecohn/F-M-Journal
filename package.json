@@ -9,7 +9,7 @@
   "license": "AGPL-3.0-only",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "vite build && node scripts/offline.mjs",
+    "build": "node scripts/icons.mjs && vite build && node scripts/offline.mjs",
     "start": "node server/index.mjs",
     "test": "node --test test/*.test.mjs",
     "desktop": "electron desktop/main.cjs",

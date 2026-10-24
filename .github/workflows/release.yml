@@ -2,7 +2,7 @@ name: Six-platform desktop release
 on:
   push:
     branches: [main]
-    paths: ['desktop/**', 'src/**', 'public/**', 'server/**', 'package*.json', 'scripts/**', '.github/workflows/release.yml']
+    paths: ['index.html', 'vite.config.mjs', 'desktop/**', 'src/**', 'public/**', 'server/**', 'package*.json', 'scripts/**', '.github/workflows/release.yml']
   workflow_dispatch:
 permissions:
   contents: read

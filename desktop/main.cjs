@@ -2,6 +2,8 @@ const {app,BrowserWindow,shell,Menu}=require('electron');
 const path=require('node:path');
 let local,mainWindow;
 app.setName('F&M Journal');
+const mobileQa=process.argv.includes('--mobile-qa');
+if(mobileQa)app.setPath('userData',path.join(app.getPath('temp'),'fm-journal-mobile-qa'));
 if(!app.requestSingleInstanceLock())app.quit();
 app.on('second-instance',()=>{mainWindow?.show();mainWindow?.focus();});
 app.whenReady().then(async()=>{
@@ -9,7 +11,7 @@ app.whenReady().then(async()=>{
  // A stable loopback origin preserves local storage across launches, entirely offline.
  const opts={cloudProxy:'https://fmjournal-production.up.railway.app',staticDir:path.join(__dirname,'../dist'),origin:'http://127.0.0.1:43127'};
  const {app:web}=createApp(opts);local=web.listen(43127,'127.0.0.1',()=>{
- const win=new BrowserWindow({width:1440,height:980,minWidth:840,minHeight:650,title:'F&M Journal',backgroundColor:'#101211',titleBarStyle:'hiddenInset',webPreferences:{contextIsolation:true,nodeIntegration:false,sandbox:true}});
+ const win=new BrowserWindow({width:mobileQa?390:1440,height:mobileQa?844:980,minWidth:mobileQa?360:840,minHeight:650,title:'F&M Journal',backgroundColor:'#101211',titleBarStyle:mobileQa?'default':'hiddenInset',webPreferences:{contextIsolation:true,nodeIntegration:false,sandbox:true}});
  mainWindow=win;
  win.webContents.setWindowOpenHandler(({url})=>{if(/^https:\/\/(www\.amerika\.social|altstack\.org|github\.com)\//.test(url))shell.openExternal(url);return {action:'deny'};});
  win.webContents.on('will-navigate',(e,url)=>{if(!url.startsWith(opts.origin+'/')){e.preventDefault();if(url.startsWith('https://'))shell.openExternal(url);}});
