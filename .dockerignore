@@ -1,0 +1,13 @@
+node_modules
+dist
+build
+release
+release-files
+data
+.git
+.env
+.env.*
+*.p12
+*.key
+*.log
+outputs
