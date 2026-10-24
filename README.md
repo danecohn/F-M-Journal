@@ -31,7 +31,7 @@ Connect an account, open **AI connections**, and create a private MCP link. Choo
 
 MCP Streamable HTTP endpoint: `/mcp` with `Authorization: Bearer <token>`, or the private `/mcp/<token>` URL for clients using URL-based credentials. Treat that URL as a password; do not publish it or paste it into public chats.
 
-Tools: `journal_overview`, `list_entries`, `daily_summary`, and, when write access is granted, `add_entry` and `update_entry`. Entries cannot be deleted through MCP. Writes use the same validation and revision controls as the app. Link expiry and revocation are checked on every call. Tool content is untrusted journal data, not agent instructions. Assistant compatibility depends on support for Streamable HTTP and the chosen authentication method; no claim of compatibility with every assistant is made.
+Tools: `journal_overview`, `list_entries`, `daily_summary`, and, when write access is granted, `add_entry`, `update_entry`, and `set_daily_rhythm`. Entries cannot be deleted through MCP. Writes use the same validation and revision controls as the app. Link expiry and revocation are checked on every call. Tool content is untrusted journal data, not agent instructions. Assistant compatibility depends on support for Streamable HTTP and the chosen authentication method; no claim of compatibility with every assistant is made.
 
 ## Develop
 

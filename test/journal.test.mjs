@@ -31,6 +31,9 @@ test('AltStack sign-in, account isolation, CSRF, sync conflicts, MCP writing and
   const edited=await rpc(key.token,'update_entry',{id:value.entry.id,changes:{mood:3,moodNotes:'Corrected by user'}});assert.equal(JSON.parse(edited.v.result.content[0].text).entry.mood,3);
   assert.equal((await rpc(key.token,'add_entry',{date:'bad',type:'mood',mood:8})).v.result.isError,true);
   assert.equal((await req('/api/journal',{cookie:alice})).v.journal.entries.length,2);
+  const rhythm=await rpc(key.token,'set_daily_rhythm',{date:'2026-10-24',wake:'06:30',sleep:'23:00',reflection:'User-reported reflection'});assert.equal(JSON.parse(rhythm.v.result.content[0].text).rhythm.wake,'06:30');
+  assert.equal((await rpc(readKey.token,'set_daily_rhythm',{date:'2026-10-24',wake:'07:00'})).v.result.isError,true);
+  assert.equal((await rpc(key.token,'set_daily_rhythm',{date:'2026-10-24',wake:'25:99'})).v.result.isError,true);
   const meta=(await req('/api/connections',{cookie:alice})).v.connections;assert.ok(meta.every(k=>!k.token&&!k.hash));
   await req('/api/connections/'+key.id,{method:'DELETE',cookie:alice,body:{}});assert.equal((await rpc(key.token,'journal_overview')).r.status,401);
   assert.equal((await req('/api/connections',{cookie:bob})).v.connections.length,0);
