@@ -1,7 +1,7 @@
 import sharp from 'sharp';
 import pngToIco from 'png-to-ico';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
-await mkdir('build',{recursive:true});const svg=await readFile('public/mark.svg');
+await mkdir('build',{recursive:true});const svg=await readFile('public/app-icon.png');
 for(const size of [180,192,512])await writeFile(`public/icon-${size}.png`,await sharp(svg).resize(size,size).png().toBuffer());
 const png=await sharp(svg).resize(1024,1024).png().toBuffer();await writeFile('build/icon.png',png);
 await writeFile('build/icon.ico',await pngToIco(await sharp(svg).resize(256,256).png().toBuffer()));

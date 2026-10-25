@@ -1,6 +1,6 @@
 {
   "name": "fm-journal",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "main": "desktop/main.cjs",
@@ -78,6 +78,6 @@
       "maintainer": "Artemis Softworks LLC",
       "executableName": "fm-journal"
     },
-    "copyright": "Copyright © 2026 Artemis Softworks LLC"
+    "copyright": "Copyright \u00a9 2026 Artemis Softworks LLC"
   }
 }
