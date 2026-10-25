@@ -1,6 +1,15 @@
 # F&M Journal
 
-**Food, mood, and the rhythm of your day. By AltStack and Dane Cohn.**
+<!-- artemis-publisher:start -->
+<img src="brand/artemis/artemis-wordmark.svg" alt="Artemis Softworks LLC" width="340">
+
+**A product of Artemis Softworks LLC.** Founded by **Demetria Althea Cohn**.
+
+Companion software for macOS, thoughtfully available for Windows and Linux. See the [Artemis identity and design system](brand/artemis/BRAND.md). Platform availability varies by product and release.
+<!-- artemis-publisher:end -->
+
+
+**Food, mood, and the rhythm of your day. By Artemis Softworks LLC.**
 
 An offline-first journal for Windows, macOS, Linux, and the web. Account connection, cloud synchronization, and AI assistant access are optional. The interface uses a graphite workspace, soft lime accents, a daily-state dial, quiet motion, and a responsive layout with Midnight and Daylight appearances.
 

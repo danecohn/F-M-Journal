@@ -2,7 +2,7 @@ export const types={food:{label:'Food',color:'#dbf9ad'},drink:{label:'Drink',col
 export const bristol=['Separate hard lumps, difficult to pass','Sausage-shaped, but lumpy','Like a sausage with cracks on its surface','Like a sausage or snake, smooth and soft','Soft blobs with clear-cut edges','Fluffy pieces with ragged edges; mushy','Watery, no solid pieces; entirely liquid'];
 export const dayKey=(d=new Date())=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 export const parseDay=s=>new Date(s+'T12:00:00');
-export const empty=()=>({entries:[],days:{},templates:[],settings:{name:'',waterGoal:2000,theme:'dark'}});
+export const empty=()=>({entries:[],days:{},templates:[],settings:{name:'',waterGoal:2000,theme:'light'}});
 export const uid=()=>crypto.randomUUID();
 export const average=a=>a.length?a.reduce((s,n)=>s+n,0)/a.length:null;
 export const moodNames=['','Very low','Low','Steady','Good','Great'];

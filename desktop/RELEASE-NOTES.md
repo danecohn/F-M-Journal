@@ -1,6 +1,6 @@
 # F&M Journal 1.0.0
 
-By **AltStack and Dane Cohn**. AGPL-3.0 open source.
+By **Artemis Softworks LLC**. AGPL-3.0 open source.
 
 Offline food, mood, energy, sleep, movement, supplement and digestion journaling. Includes the seven-type Bristol reference, Excel import/export, JSON backups, CSV exports, reusable entries, search, daily reflections and descriptive trends.
 

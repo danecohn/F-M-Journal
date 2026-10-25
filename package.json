@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "main": "desktop/main.cjs",
-  "description": "Food, mood, and the rhythm of your day. By AltStack and Dane Cohn.",
-  "author": "AltStack and Dane Cohn",
+  "description": "Food, mood, and the rhythm of your day. By Artemis Softworks LLC.",
+  "author": "Artemis Softworks LLC",
   "license": "AGPL-3.0-only",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
@@ -75,8 +75,9 @@
       ],
       "category": "Office",
       "icon": "build/icon.png",
-      "maintainer": "AltStack and Dane Cohn",
+      "maintainer": "Artemis Softworks LLC",
       "executableName": "fm-journal"
-    }
+    },
+    "copyright": "Copyright © 2026 Artemis Softworks LLC"
   }
 }
