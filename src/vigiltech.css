@@ -1,0 +1,154 @@
+/* VigilTech skin for Vigil Journal. Maps the app's own variables onto the shared design system
+   (public/brand/vigiltech/css/goldengate.css). Every text/background pair is set together, in every state, and is at least 4.5:1. */
+body.vt { margin: 0; font-family: var(--vt-font); background: var(--vt-wallpaper) fixed, var(--vt-bg); color: var(--vt-label); }
+body.vt button, body.vt input, body.vt select, body.vt textarea { font-family: inherit; }
+
+.app {
+  --bg: var(--vt-bg); --sidebar: var(--vt-surface); --panel: var(--vt-surface); --panel2: var(--vt-surface-2);
+  --text: var(--vt-label); --muted: var(--vt-label-2); --faint: var(--vt-label-2);
+  --line: var(--vt-separator); --accent: var(--vt-tint-strong); --input: var(--vt-surface);
+  --soft: color-mix(in srgb, var(--vt-pink-500) 12%, var(--vt-surface));
+  --shadow: var(--vt-shadow-2);
+  --ok: #1d6b32; --warn: #8a4300; --warn-soft: #fff0dc; --bad: #a3001b;
+  --c-drink: #1a5cc2; --c-move: #9a4a00; --c-mood: #6b3fb0; --c-dig: #8a4a38; --c-other: #6b5d68;
+  /* feature tiles stay dark plum in both appearances */
+  --tile-1: #241026; --tile-2: #3a0e2c; --tile-text: #f7eef2; --tile-muted: #d9c6d1; --tile-accent: #ff8fb3; --tile-line: rgba(255, 190, 220, .22);
+  min-height: 100vh; color: var(--text); background: none;
+}
+:root[data-theme="dark"] .app { --ok: #7be09a; --warn: #ffb066; --warn-soft: #36240c; --bad: #ff8a9c; --c-drink: #8ab8ff; --c-move: #ffb066; --c-mood: #c3a6ff; --c-dig: #f0a58c; --c-other: #b7a5b1; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .app { --ok: #7be09a; --warn: #ffb066; --warn-soft: #36240c; --bad: #ff8a9c; --c-drink: #8ab8ff; --c-move: #ffb066; --c-mood: #c3a6ff; --c-dig: #f0a58c; --c-other: #b7a5b1; } }
+
+/* text-level fixes: the original used a dimmer "faint" colour for small text */
+.app .app-footer, .app .eyebrow, .app .workspace-label, .app .brand-sub, .app .credit, .app .breadcrumb { color: var(--muted); }
+.app .workspace-label span { color: var(--muted); }
+.app .brand img { filter: none; width: 40px; height: 40px; border-radius: 22.37%; box-shadow: var(--vt-shadow-1); }
+.app .brand > span { font-size: 21px; font-weight: 700; letter-spacing: 0; line-height: 1.1; color: var(--text); }
+.app .brand-sub { font-size: 11px; letter-spacing: 2.4px; margin-top: 4px; }
+.app h1, .app h2, .app h3 { font-weight: 700; letter-spacing: -.01em; }
+.app h1 { letter-spacing: -.02em; }
+.app a { color: inherit; }
+.app :focus-visible { outline: 3px solid var(--vt-tint-strong) !important; outline-offset: 3px; border-radius: 8px; }
+.app input[type=date], .app input[type=time] { color-scheme: light; }
+:root[data-theme="dark"] .app input[type=date], :root[data-theme="dark"] .app input[type=time] { color-scheme: dark; }
+.app input::placeholder, .app textarea::placeholder { color: var(--muted); opacity: 1; }
+.app input, .app textarea, .app select { border-radius: 8px; background: var(--input); color: var(--text); box-shadow: inset 0 1px 2px rgba(30, 6, 22, .1); }
+.app input:focus, .app textarea:focus, .app select:focus { border-color: var(--vt-tint-strong); box-shadow: var(--vt-focus); }
+.app select option { background: var(--panel); color: var(--text); }
+
+/* Sidebar: frosted glass over the wallpaper, with a solid enough veil to keep text legible */
+.app .sidebar { background: color-mix(in srgb, var(--vt-surface) 82%, transparent); -webkit-backdrop-filter: blur(22px) saturate(1.7); backdrop-filter: blur(22px) saturate(1.7); border-right: 1px solid var(--vt-glass-edge); box-shadow: inset -1px 0 var(--vt-separator); }
+.app .sidebar nav button { color: var(--muted); border-radius: 10px; font-size: 13px; font-weight: 600; }
+.app .sidebar nav button:hover, .app .settings-nav:hover { background: var(--vt-fill); color: var(--text); }
+.app .sidebar nav button.active, .app .settings-nav.active { background: var(--soft); color: var(--accent); }
+.app .sidebar nav button.active:before { background: var(--vt-pink-600); width: 3px; height: 18px; }
+.app .nav-dot { background: var(--vt-pink-600); }
+.app .quiet-card { background: var(--panel2); border-radius: 14px; }
+.app .quiet-card button { color: var(--accent); font-size: 12px; font-weight: 600; }
+.app .quiet-card strong { color: var(--text); }
+.app .settings-nav { color: var(--muted); font-size: 13px; font-weight: 600; }
+.app .profile strong { color: var(--text); font-size: 12px; }
+.app .avatar, .app .top-avatar { background: var(--soft); color: var(--accent); font-weight: 700; font-size: 12px; }
+.app .top-avatar:hover { background: var(--vt-fill-2); color: var(--text); }
+
+/* Toolbar: frosted, sticky */
+.app .shell { background: var(--bg); min-height: 100vh; }
+.app .topbar { position: sticky; top: 0; z-index: 15; background: color-mix(in srgb, var(--vt-bg) 86%, transparent); -webkit-backdrop-filter: blur(18px) saturate(1.6); backdrop-filter: blur(18px) saturate(1.6); box-shadow: inset 0 -1px var(--vt-separator); border-bottom: 0; height: 64px; }
+.app .breadcrumb { font-size: 12px; }
+.app .breadcrumb strong { color: var(--text); font-weight: 600; }
+.app .sync-status { color: var(--muted); font-size: 12px; }
+.app .sync-status.warning { color: var(--warn); }
+.app .icon-button { color: var(--muted); border-radius: 8px; }
+.app .icon-button:hover { background: var(--vt-fill); color: var(--text); }
+.app .text-button { color: var(--muted); font-size: 12px; }
+.app .text-button:hover { color: var(--accent); }
+
+/* Surfaces */
+.app .panel, .app .metric { background: var(--panel); border: 0; border-radius: 14px; box-shadow: var(--vt-shadow-1), 0 0 0 1px var(--line); }
+.app .metric-top { color: var(--muted); }
+.app .metric-dash { color: var(--muted); }
+.app .metric-top svg { color: var(--accent); }
+.app .metric.purple .metric-top svg { color: var(--c-mood); }
+.app .metric.amber .metric-top svg { color: var(--c-move); }
+.app .metric.blue .metric-top svg { color: var(--c-drink); }
+.app .modal { background: var(--panel); border: 0; border-radius: 22px; box-shadow: var(--vt-shadow-2), inset 0 1px 0 var(--vt-glass-edge), 0 0 0 1px var(--line); color: var(--text); }
+.app .modal-backdrop { background: rgba(18, 10, 20, .72); }
+.app .page-heading h1 span, .app .page-heading h2 span { color: var(--accent); }
+.app .entry-time, .app .entry-label, .app .entry-time small { color: var(--muted); }
+.app .entry-mood { color: var(--muted); background: var(--vt-fill); }
+.app .type-icon { background: var(--vt-fill); color: var(--c-other); border-radius: 10px; }
+.app .type-icon.food { background: color-mix(in srgb, var(--vt-pink-500) 12%, var(--panel)); color: var(--accent); }
+.app .type-icon.drink { background: color-mix(in srgb, var(--c-drink) 12%, var(--panel)); color: var(--c-drink); }
+.app .type-icon.movement { background: color-mix(in srgb, var(--c-move) 12%, var(--panel)); color: var(--c-move); }
+.app .type-icon.mood { background: color-mix(in srgb, var(--c-mood) 12%, var(--panel)); color: var(--c-mood); }
+.app .type-icon.digestion { background: color-mix(in srgb, var(--c-dig) 12%, var(--panel)); color: var(--c-dig); }
+.app .chosen { background: var(--soft) !important; }
+.app .observation > span { color: var(--accent); }
+.app .source-time, .app .import-warnings { background: var(--warn-soft); color: var(--warn); }
+.app .import-warnings strong { color: var(--warn); }
+.app .demo-banner { background: var(--soft); color: var(--accent); }
+.app .conflict-banner { background: var(--warn-soft); color: var(--warn); }
+.app .demo-banner button, .app .conflict-banner button { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.app .welcome-orb, .app .connection-orb { color: var(--accent); background: var(--soft); }
+.app .preview-badge { color: var(--accent); background: var(--soft); }
+.app .footer-mark { color: var(--vt-pink-600); }
+.app .app-footer .publisher-mark { width: 20px; height: 20px; border-radius: 22.37%; filter: none; }
+.app .live-dot, .app .tiny-orbit:before { background: var(--vt-pink-600); }
+
+/* Feature tiles (overview hero, reflection): dark plum with the sweeping-curve wallpaper */
+.app .hero-panel { border: 0; border-radius: 18px; box-shadow: var(--vt-shadow-2), inset 0 1px 0 rgba(255, 190, 220, .18);
+  background: radial-gradient(70% 90% at 92% 115%, rgba(255, 0, 88, .3), transparent 70%), radial-gradient(120% 90% at 0% 115%, rgba(255, 143, 179, .1) 0 38%, transparent 38.3%), linear-gradient(150deg, #1a0b1c, #2b0a1e 60%, #3a0e2c); color: var(--tile-text); }
+.app .hero-panel:after { opacity: .2; }
+.app .hero-panel h2, .app .hero-copy h2 { color: var(--tile-text); }
+.app .hero-panel h2 span, .app .hero-copy h2 span { color: var(--tile-accent); }
+.app .hero-panel p, .app .hero-panel .eyebrow, .app .hero-panel small, .app .hero-panel .hero-footer, .app .hero-copy p, .app .hero-copy .eyebrow, .app .hero-bottom, .app .orbit-label, .app .orbit-footer { color: var(--tile-muted); }
+.app .hero-link { color: var(--tile-accent); }
+.app .reflection-card { border: 0; border-radius: 16px; background: radial-gradient(90% 120% at 100% 120%, rgba(255, 0, 88, .22), transparent 70%), linear-gradient(140deg, #1e0d22, #2b0a1e); box-shadow: var(--vt-shadow-1); }
+.app .reflection-card h3 { color: var(--tile-text); }
+.app .reflection-card p, .app .reflection-card .eyebrow { color: var(--tile-muted); }
+.app .reflection-card button { color: var(--tile-accent); }
+
+/* Buttons: text and fill always set together */
+.app button:disabled { opacity: 1; cursor: not-allowed; }
+.app .primary { background: var(--vt-pink-600); color: #fff; border: 1px solid var(--vt-pink-700); border-radius: 10px; box-shadow: inset 0 1px 0 rgba(255, 190, 215, .45), 0 1px 3px rgba(61, 0, 22, .3); font-weight: 700; font-size: 13px; filter: none; transform: none; text-shadow: 0 1px 0 rgba(61, 0, 22, .3); }
+.app .primary svg { color: #fff; }
+.app .primary:hover, .app .primary:focus-visible { background: var(--vt-pink-700); color: #fff; filter: none; transform: none; }
+.app .primary:active { background: var(--vt-pink-800); color: #fff; }
+.app .primary kbd { color: #fff; opacity: 1; border-left-color: rgba(255, 255, 255, .45); }
+.app .primary:disabled { background: var(--vt-fill-2); color: var(--text); border-color: var(--line); box-shadow: none; text-shadow: none; }
+.app .primary:disabled svg { color: var(--text); }
+.app .secondary { background: linear-gradient(var(--panel), var(--panel2)); color: var(--text); border: 1px solid var(--line); border-radius: 10px; font-weight: 600; font-size: 13px; }
+.app .secondary:hover { border-color: var(--vt-tint-strong); color: var(--text); }
+.app .secondary:disabled { background: var(--vt-fill); color: var(--muted); }
+.app .danger { background: #a3001b; color: #fff; border-radius: 10px; font-weight: 600; font-size: 13px; }
+.app .danger:hover { background: #7f0015; color: #fff; }
+.app .danger-text { color: var(--bad) !important; }
+.app .primary, .app .secondary, .app .danger { font-size: 13px; }
+
+/* Charts and bars */
+.app .bar-track { background: var(--vt-fill); }
+.app .chart-legend span { background: var(--vt-pink-600); }
+.app .chart-legend span:nth-child(2) { background: var(--c-mood); }
+.app .toast { background: var(--tile-2); color: var(--tile-text); border: 1px solid var(--tile-line); border-radius: 14px; font-size: 13px; }
+.app .toast > svg, .app .toast button { color: var(--tile-accent); }
+.app ::selection { background: var(--vt-tint-soft); }
+
+@media (max-width: 700px) {
+  .app .brand > span { font-size: 19px; }
+  .app button { min-height: 44px; }
+  .app .icon-button { min-width: 44px; }
+  .app input, .app textarea, .app select { font-size: 16px; }
+  .app .topbar { height: 56px; }
+}
+@media (prefers-reduced-motion: reduce) { .app *, .app *::before, .app *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+@media (prefers-reduced-transparency: reduce) {
+  .app .sidebar, .app .topbar { background: var(--vt-surface); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .app .modal-backdrop { backdrop-filter: none; background: #120a14; opacity: .92; }
+}
+@media (forced-colors: active) { .app :focus-visible { outline-color: Highlight !important; } .app button, .app input { border: 1px solid ButtonText; } }
+.app .primary:disabled kbd{color:var(--text)}
+@media (max-width: 680px) {
+  .app .sidebar { background: color-mix(in srgb, var(--vt-surface) 94%, transparent); border-right: 0; border-top: 1px solid var(--vt-separator); box-shadow: none; padding-bottom: env(safe-area-inset-bottom); }
+  .app .sidebar nav button { font-size: 10px; font-weight: 400; padding: 5px 2px; min-width: 0; flex: 1 1 0; letter-spacing: 0; white-space: nowrap; }
+  .app .sidebar nav button.active { font-weight: 700; }
+  .app .sidebar nav { gap: 2px; }
+}

@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "main": "desktop/main.cjs",
-  "description": "Food, mood, and the rhythm of your day. By Cohnsoft.",
-  "author": "Cohnsoft",
-  "license": "AGPL-3.0-only",
+  "description": "Food, mood, and the rhythm of your day. By VigilTech.",
+  "author": "VigilTech",
+  "license": "GPL-3.0-only",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "node scripts/icons.mjs && vite build && node scripts/offline.mjs",
@@ -32,7 +32,7 @@
   },
   "build": {
     "appId": "org.altstack.fmjournal",
-    "productName": "Cohnsoft Journal",
+    "productName": "Vigil Journal",
     "artifactName": "FMJournal-${os}-${arch}.${ext}",
     "directories": {
       "output": "release"
@@ -75,9 +75,9 @@
       ],
       "category": "Office",
       "icon": "build/icon.png",
-      "maintainer": "Cohnsoft",
+      "maintainer": "VigilTech",
       "executableName": "fm-journal"
     },
-    "copyright": "Copyright \u00a9 2026 Cohnsoft"
+    "copyright": "Copyright \u00a9 2026 VigilTech"
   }
 }
