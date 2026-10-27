@@ -1,5 +1,7 @@
 name: Six-platform desktop release
 on:
+  pull_request:
+    branches: [main]
   push:
     branches: [main]
     paths: ['index.html', 'vite.config.mjs', 'desktop/**', 'src/**', 'public/**', 'server/**', 'package*.json', 'scripts/**', '.github/workflows/release.yml']
@@ -48,6 +50,8 @@ jobs:
           npm run dist -- --mac --${{ matrix.arch }} --dir --publish never -c.mac.notarize=false -c.mac.identity=-
           APP=$(find release -maxdepth 2 -name '*.app' -print -quit)
           test -n "$APP"
+          # PR builds intentionally receive no signing credentials. Seal this CI build ad hoc.
+          codesign --force --deep --sign - --options runtime --entitlements desktop/entitlements.mac.plist "$APP"
           codesign --verify --deep --strict --verbose=2 "$APP"
           codesign -dv --verbose=2 "$APP" 2>&1 | tee release/signature-${{ matrix.arch }}.txt
           STAGE=$(mktemp -d)
@@ -92,6 +96,7 @@ jobs:
           path: release-files/*
           if-no-files-found: error
   publish:
+    if: github.event_name != 'pull_request'
     needs: package
     runs-on: ubuntu-24.04
     permissions:
