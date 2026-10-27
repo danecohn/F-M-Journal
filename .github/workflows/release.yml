@@ -1,5 +1,7 @@
 name: Six-platform desktop release
 on:
+  pull_request:
+    branches: [main]
   push:
     branches: [main]
     paths: ['index.html', 'vite.config.mjs', 'desktop/**', 'src/**', 'public/**', 'server/**', 'package*.json', 'scripts/**', '.github/workflows/release.yml']
@@ -92,6 +94,7 @@ jobs:
           path: release-files/*
           if-no-files-found: error
   publish:
+    if: github.event_name != 'pull_request'
     needs: package
     runs-on: ubuntu-24.04
     permissions:
