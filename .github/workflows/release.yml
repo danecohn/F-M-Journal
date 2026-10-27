@@ -51,14 +51,14 @@ jobs:
           codesign --verify --deep --strict --verbose=2 "$APP"
           codesign -dv --verbose=2 "$APP" 2>&1 | tee release/signature-${{ matrix.arch }}.txt
           STAGE=$(mktemp -d)
-          ditto "$APP" "$STAGE/F&M Journal.app"
+          ditto "$APP" "$STAGE/Cohnsoft Journal.app"
           ln -s /Applications "$STAGE/Applications"
           DMG="release/FMJournal-mac-${{ matrix.arch }}.dmg"
-          hdiutil create -volname 'F&M Journal' -srcfolder "$STAGE" -format UDZO "$DMG"
+          hdiutil create -volname 'Cohnsoft Journal' -srcfolder "$STAGE" -format UDZO "$DMG"
           hdiutil verify "$DMG"
           MOUNT=$(mktemp -d)
           hdiutil attach -readonly -nobrowse -mountpoint "$MOUNT" "$DMG"
-          codesign --verify --deep --strict --verbose=2 "$MOUNT/F&M Journal.app"
+          codesign --verify --deep --strict --verbose=2 "$MOUNT/Cohnsoft Journal.app"
           hdiutil detach "$MOUNT"
           rm -rf "$STAGE"
       - name: Smoke-test Windows
@@ -66,7 +66,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $exe = Get-ChildItem release -Recurse -Filter 'F&M Journal.exe' | Where-Object {$_.DirectoryName -match 'unpacked'} | Select-Object -First 1
+          $exe = Get-ChildItem release -Recurse -Filter 'Cohnsoft Journal.exe' | Where-Object {$_.DirectoryName -match 'unpacked'} | Select-Object -First 1
           if (!$exe) { throw 'Packaged app missing' }
           $process = Start-Process -FilePath $exe.FullName -ArgumentList '--smoke-test' -PassThru -Wait
           if ($process.ExitCode -ne 0) { throw 'Offline app smoke test failed' }
@@ -75,7 +75,7 @@ jobs:
         shell: bash
         run: |
           APP=$(find release -maxdepth 2 -name '*.app' -print -quit)
-          "$APP/Contents/MacOS/F&M Journal" --smoke-test
+          "$APP/Contents/MacOS/Cohnsoft Journal" --smoke-test
       - name: Smoke-test Linux
         if: runner.os == 'Linux'
         shell: bash
@@ -115,5 +115,6 @@ jobs:
         run: |
           VERSION=$(node -p 'require("./package.json").version')
           TAG="desktop-v${VERSION}"
-          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --target "$GITHUB_SHA" --title "F&M Journal ${VERSION} · Artemis Softworks LLC" --notes-file desktop/RELEASE-NOTES.md
-          gh release upload "$TAG" release-files/* --clobber
+          if gh release view "$TAG" >/dev/null 2>&1; then echo "Release already exists; bump the version instead of replacing installers." >&2; exit 1; fi
+          gh release create "$TAG" --target "$GITHUB_SHA" --title "Cohnsoft Journal ${VERSION} · Cohnsoft" --notes-file desktop/RELEASE-NOTES.md
+          gh release upload "$TAG" release-files/*

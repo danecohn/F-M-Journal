@@ -1,1 +1,22 @@
-{"name": "F&M Journal", "short_name": "F&M", "start_url": "/", "display": "standalone", "background_color": "#101211", "theme_color": "#101211", "icons": [{"src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"}, {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}]}
+{
+  "name": "Cohnsoft Journal",
+  "short_name": "Cohnsoft Journal",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f2f2f7",
+  "theme_color": "#0a7a37",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

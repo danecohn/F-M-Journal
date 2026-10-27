@@ -1,11 +1,11 @@
 {
   "name": "fm-journal",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "type": "module",
   "main": "desktop/main.cjs",
-  "description": "Food, mood, and the rhythm of your day. By Artemis Softworks LLC.",
-  "author": "Artemis Softworks LLC",
+  "description": "Food, mood, and the rhythm of your day. By Cohnsoft.",
+  "author": "Cohnsoft",
   "license": "AGPL-3.0-only",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
@@ -32,7 +32,7 @@
   },
   "build": {
     "appId": "org.altstack.fmjournal",
-    "productName": "F&M Journal",
+    "productName": "Cohnsoft Journal",
     "artifactName": "FMJournal-${os}-${arch}.${ext}",
     "directories": {
       "output": "release"
@@ -75,9 +75,9 @@
       ],
       "category": "Office",
       "icon": "build/icon.png",
-      "maintainer": "Artemis Softworks LLC",
+      "maintainer": "Cohnsoft",
       "executableName": "fm-journal"
     },
-    "copyright": "Copyright \u00a9 2026 Artemis Softworks LLC"
+    "copyright": "Copyright \u00a9 2026 Cohnsoft"
   }
 }
