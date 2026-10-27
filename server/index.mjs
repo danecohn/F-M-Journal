@@ -1,7 +1,7 @@
 import express from 'express';
 import {randomBytes,createHash} from 'node:crypto';
 import {resolve,join} from 'node:path';
-import {existsSync} from 'node:fs';
+import {existsSync,readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {createStore,validateJournal} from './store.mjs';
 import {mountMcp} from './mcp.mjs';
@@ -11,15 +11,17 @@ export function createApp(options={}){
  const store=desktop?null:createStore(env.DATA_DIR||'data',env.DATA_ENCRYPTION_KEY);
  const app=express(),sessions=new Map(),pairings=new Map(),busy=new Set(),limits=new Map();
  const origin=()=>options.origin||env.PUBLIC_ORIGIN||'http://localhost:3104',social=env.SOCIAL_ORIGIN||'https://www.amerika.social';
+ const base=(env.PUBLIC_BASE_PATH||'').replace(/\/$/,'');if(base&&!/^\/[a-z][a-z0-9-]*$/.test(base))throw Error('Invalid PUBLIC_BASE_PATH');
  const cookie=(req,name)=>(req.headers.cookie||'').split(';').map(s=>s.trim()).find(s=>s.startsWith(name+'='))?.slice(name.length+1)||'';
  const cookieStr=(name,value,age)=>`${name}=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${age}${origin().startsWith('https:')?'; Secure':''}`;
  const fail=(s,message)=>{throw Object.assign(Error(message),{status:s})};
  app.disable('x-powered-by');
+ app.use((req,res,next)=>{if(base&&(req.url===base||req.url.startsWith(base+'/')||req.url.startsWith(base+'?')))req.url=req.url.slice(base.length)||'/';next();});
  app.use((req,res,next)=>{
   res.set({'X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','X-Frame-Options':'DENY','Permissions-Policy':'camera=(), microphone=(), geolocation=()','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"});
   if(req.path.startsWith('/api/'))res.set('Cache-Control','no-store');
-  if(!req.path.startsWith('/mcp')&&!['GET','HEAD','OPTIONS'].includes(req.method)&&req.headers.origin!==origin())return res.status(403).json({error:'Request origin rejected.'});
-  if(req.path.startsWith('/mcp')&&req.headers.origin&&req.headers.origin!==origin())return res.status(403).json({error:'MCP origin rejected.'});
+  if(!req.path.startsWith('/mcp')&&!['GET','HEAD','OPTIONS'].includes(req.method)&&req.headers.origin!==new URL(origin()).origin)return res.status(403).json({error:'Request origin rejected.'});
+  if(req.path.startsWith('/mcp')&&req.headers.origin&&req.headers.origin!==new URL(origin()).origin)return res.status(403).json({error:'MCP origin rejected.'});
   if(req.path.startsWith('/api/auth/')){const ip=req.socket.remoteAddress,now=Date.now();for(const[k,v]of limits)if(v.until<now)limits.delete(k);const r=limits.get(ip)||{n:0,until:now+60000};limits.set(ip,r);if(++r.n>60)return res.status(429).json({error:'Please wait a minute before trying again.'});}
   next();
  });
@@ -59,12 +61,15 @@ export function createApp(options={}){
  }
  app.get('/healthz',(req,res)=>res.json({ok:true,product:'Vigil Journal',version:'1.0.0'}));
  const root=options.staticDir||resolve('dist');
- app.use(express.static(root,{maxAge:0}));
+ const index=(req,res)=>{if(!existsSync(join(root,'index.html')))return res.status(503).send('Build the client first.');let html=readFileSync(join(root,'index.html'),'utf8');if(base)html=html.replace('<head>','<head><base href="'+base+'/"><meta name="vigil-base" content="'+base+'">').replace(/(href|src)="\/(?!\/)/g,'$1="'+base+'/');res.type('html').send(html);};
+ app.get(['/','/index.html'],index);
+ app.get('/manifest.webmanifest',(req,res,next)=>{if(!base)return next();const m=JSON.parse(readFileSync(join(root,'manifest.webmanifest'),'utf8'));m.start_url=base+'/';m.scope=base+'/';for(const i of m.icons||[])if(i.src?.startsWith('/'))i.src=base+i.src;res.type('application/manifest+json').send(m);});
+ app.use(express.static(root,{maxAge:0,index:false}));
  app.get('/downloads',async(req,res)=>{
   // Links are shown only for assets that actually exist in the public release.
   try{const r=await net('https://api.github.com/repos/danecohn/F-M-Journal/releases/latest',{headers:{Accept:'application/vnd.github+json'},signal:AbortSignal.timeout(10000)});if(!r.ok)return res.json({release:null,assets:[]});const v=await r.json();res.json({release:v.tag_name,url:v.html_url,assets:v.assets.map(a=>({name:a.name,url:a.browser_download_url,size:a.size}))});}catch{res.status(503).json({error:'Downloads are temporarily unavailable.'});}
  });
- app.get('/{*path}',(req,res)=>{if(req.path.startsWith('/api/'))return res.status(404).json({error:'Endpoint not found.'});if(!existsSync(join(root,'index.html')))return res.status(503).send('Build the client first.');res.sendFile(join(root,'index.html'));});
+ app.get('/{*path}',(req,res)=>{if(req.path.startsWith('/api/'))return res.status(404).json({error:'Endpoint not found.'});if(!existsSync(join(root,'index.html')))return res.status(503).send('Build the client first.');index(req,res);});
  app.use((e,req,res,next)=>res.status(e.status||500).json({error:e.status?e.message:'Something went wrong. Your saved journal is unchanged.'}));
  return {app,store,sessions,close(){sessions.clear();pairings.clear();}};
 }
