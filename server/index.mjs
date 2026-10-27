@@ -12,6 +12,7 @@ export function createApp(options={}){
  const app=express(),sessions=new Map(),pairings=new Map(),busy=new Set(),limits=new Map();
  const origin=()=>options.origin||env.PUBLIC_ORIGIN||'http://localhost:3104',social=env.SOCIAL_ORIGIN||'https://www.amerika.social';
  const base=(env.PUBLIC_BASE_PATH||'').replace(/\/$/,'');if(base&&!/^\/[a-z][a-z0-9-]*$/.test(base))throw Error('Invalid PUBLIC_BASE_PATH');
+ const allowedOrigins=new Set([new URL(origin()).origin,...(base?['https://fmjournal-production.up.railway.app']:[])]);
  const cookie=(req,name)=>(req.headers.cookie||'').split(';').map(s=>s.trim()).find(s=>s.startsWith(name+'='))?.slice(name.length+1)||'';
  const cookieStr=(name,value,age)=>`${name}=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${age}${origin().startsWith('https:')?'; Secure':''}`;
  const fail=(s,message)=>{throw Object.assign(Error(message),{status:s})};
@@ -20,8 +21,8 @@ export function createApp(options={}){
  app.use((req,res,next)=>{
   res.set({'X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','X-Frame-Options':'DENY','Permissions-Policy':'camera=(), microphone=(), geolocation=()','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"});
   if(req.path.startsWith('/api/'))res.set('Cache-Control','no-store');
-  if(!req.path.startsWith('/mcp')&&!['GET','HEAD','OPTIONS'].includes(req.method)&&req.headers.origin!==new URL(origin()).origin)return res.status(403).json({error:'Request origin rejected.'});
-  if(req.path.startsWith('/mcp')&&req.headers.origin&&req.headers.origin!==new URL(origin()).origin)return res.status(403).json({error:'MCP origin rejected.'});
+  if(!req.path.startsWith('/mcp')&&!['GET','HEAD','OPTIONS'].includes(req.method)&&!allowedOrigins.has(req.headers.origin))return res.status(403).json({error:'Request origin rejected.'});
+  if(req.path.startsWith('/mcp')&&req.headers.origin&&!allowedOrigins.has(req.headers.origin))return res.status(403).json({error:'MCP origin rejected.'});
   if(req.path.startsWith('/api/auth/')){const ip=req.socket.remoteAddress,now=Date.now();for(const[k,v]of limits)if(v.until<now)limits.delete(k);const r=limits.get(ip)||{n:0,until:now+60000};limits.set(ip,r);if(++r.n>60)return res.status(429).json({error:'Please wait a minute before trying again.'});}
   next();
  });
