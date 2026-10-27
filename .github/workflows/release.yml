@@ -50,6 +50,8 @@ jobs:
           npm run dist -- --mac --${{ matrix.arch }} --dir --publish never -c.mac.notarize=false -c.mac.identity=-
           APP=$(find release -maxdepth 2 -name '*.app' -print -quit)
           test -n "$APP"
+          # PR builds intentionally receive no signing credentials. Seal this CI build ad hoc.
+          codesign --force --deep --sign - --options runtime --entitlements desktop/entitlements.mac.plist "$APP"
           codesign --verify --deep --strict --verbose=2 "$APP"
           codesign -dv --verbose=2 "$APP" 2>&1 | tee release/signature-${{ matrix.arch }}.txt
           STAGE=$(mktemp -d)
