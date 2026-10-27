@@ -1,15 +1,15 @@
-# F&M Journal
+# Cohnsoft Journal
 
 <!-- artemis-publisher:start -->
-<img src="brand/artemis/artemis-wordmark.svg" alt="Artemis Softworks LLC" width="340">
+<img src="brand/artemis/artemis-wordmark.svg" alt="Cohnsoft" width="340">
 
-**A product of Artemis Softworks LLC.** Founded by **Demetria Althea Cohn**.
+**A product of Cohnsoft.** Founded by **Demetria Althea Cohn**.
 
 Companion software for macOS, thoughtfully available for Windows and Linux. See the [Artemis identity and design system](brand/artemis/BRAND.md). Platform availability varies by product and release.
 <!-- artemis-publisher:end -->
 
 
-**Food, mood, and the rhythm of your day. By Artemis Softworks LLC.**
+**Food, mood, and the rhythm of your day. By Cohnsoft.**
 
 An offline-first journal for Windows, macOS, Linux, and the web. Account connection, cloud synchronization, and AI assistant access are optional. The interface uses a graphite workspace, soft lime accents, a daily-state dial, quiet motion, and a responsive layout with Midnight and Daylight appearances.
 
@@ -30,7 +30,7 @@ The personal sample workbook is **not** included in this repository. The interac
 
 The desktop app bundles the complete interface, including import/export code and fonts. It uses a stable loopback origin and a persistent Electron profile so journals survive relaunches without internet. Browser local mode uses localStorage; the web shell is cached for offline use after its first successful load. Clearing browser site data removes local journals, so keep JSON backups.
 
-Connecting an AltStack account is a deliberate action. An existing opt-in connection may check its session on launch. Sign-in uses AltStack's browser approval and PKCE exchange. The temporary Social token is immediately revoked, and F&M maintains a separate HttpOnly session. Passwords and Social access tokens are not retained.
+Connecting a Cohnsoft account is a deliberate action. An existing opt-in connection may check its session on launch. Sign-in uses Cohnsoft's browser approval and PKCE exchange. The temporary Social token is immediately revoked, and F&M maintains a separate HttpOnly session. Passwords and Social access tokens are not retained.
 
 Connected journals persist in AES-256-GCM encrypted files on a dedicated Railway volume. Device caches allow offline editing; revision checks prevent one device or an AI connection silently overwriting another's edits. Conflicts prompt a local backup and explicit resolution. Cloud data is encrypted at rest, **not end-to-end encrypted**. Device localStorage relies on OS/profile protection and disk encryption.
 
@@ -71,10 +71,10 @@ npm run dist -- --linux --x64 --publish never
 
 The release workflow builds Windows x64/ARM64, macOS Intel/Apple Silicon, and Linux x64/ARM64. It smoke-tests the packaged app, checksums every installer, and requires all six platforms before publishing. Mac builds are ad-hoc signed and deep/strict verified both before and after mounting the final disk image. They are not Apple Developer ID signed or notarized. See [release notes](desktop/RELEASE-NOTES.md) for app-specific first-launch instructions. Windows packages are unsigned. No platform protection is disabled by the installed application.
 
-`npm test` exercises real HTTP sign-in with a mocked AltStack identity service, session isolation, CSRF rejection, encrypted persistence, revision conflicts, MCP scopes/writes/revocation, original workbook import, and sleep/missing-rating calculations. CI also builds the production Docker image. Production AltStack account approval requires a real account and is separate from the mocked integration test.
+`npm test` exercises real HTTP sign-in with a mocked Cohnsoft identity service, session isolation, CSRF rejection, encrypted persistence, revision conflicts, MCP scopes/writes/revocation, original workbook import, and sleep/missing-rating calculations. CI also builds the production Docker image. Production Cohnsoft account approval requires a real account and is separate from the mocked integration test.
 
 ## License and credits
 
-Copyright 2026 AltStack and Dane Cohn. GNU AGPL v3. Inter is distributed under its included SIL Open Font License. Electron, React, Express, ExcelJS, Lucide and other dependencies retain their own licenses.
+Copyright 2026 Cohnsoft and Dane Cohn. GNU AGPL v3. Inter is distributed under its included SIL Open Font License. Electron, React, Express, ExcelJS, Lucide and other dependencies retain their own licenses.
 
 This is a personal observation tool. It does not provide diagnoses, nutrition prescriptions, or causal medical conclusions.

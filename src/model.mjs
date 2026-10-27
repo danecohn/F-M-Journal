@@ -18,7 +18,7 @@ export function demo(){const j=empty();j.settings.name='Alex';for(let n=0;n<14;n
  return j;}
 export function trend(journal,days=7){const now=new Date();return Array.from({length:days},(_,i)=>{const d=new Date(now);d.setDate(d.getDate()-(days-i-1));const date=dayKey(d);return {date,label:d.toLocaleDateString(undefined,{weekday:'short'}),...stats(journal.entries.filter(e=>e.date===date),journal.days[date])};});}
 export function safeJournal(v){
- if(!v||!Array.isArray(v.entries)||v.entries.length>20000||!v.days||Array.isArray(v.days)||!Array.isArray(v.templates)||v.templates.length>200||!v.settings)throw Error('This is not an F&M Journal backup.');
+ if(!v||!Array.isArray(v.entries)||v.entries.length>20000||!v.days||Array.isArray(v.days)||!Array.isArray(v.templates)||v.templates.length>200||!v.settings)throw Error('This is not a Cohnsoft Journal backup.');
  if(typeof v.settings.name!=='string'||v.settings.name.length>100||!Number.isFinite(v.settings.waterGoal)||v.settings.waterGoal<250||v.settings.waterGoal>10000||!['dark','light'].includes(v.settings.theme))throw Error('The backup has invalid preferences.');
  const ids=new Set();for(const e of v.entries){
   if(!e||typeof e.id!=='string'||ids.has(e.id)||!/^\d{4}-\d{2}-\d{2}$/.test(e.date)||!types[e.type])throw Error('The backup contains invalid or duplicate entries.');ids.add(e.id);

@@ -1,6 +1,7 @@
 import {readdir,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-const assets=['/','/index.html','/mark.svg','/Inter.woff2','/manifest.webmanifest','/icon-180.png','/icon-192.png','/icon-512.png',...(await readdir('dist/assets')).map(n=>'/assets/'+n)];
+async function brandFiles(folder){const result=[];for(const e of await readdir(folder,{withFileTypes:true})){const path=folder+'/'+e.name;if(e.isDirectory())result.push(...await brandFiles(path));else if(/\.(?:css|woff2|svg|png)$/.test(e.name))result.push('/'+path.slice(5));}return result;}
+const assets=['/','/index.html','/mark.svg','/manifest.webmanifest','/icon-180.png','/icon-192.png','/icon-512.png',...(await brandFiles('dist/brand/cohnsoft')),...(await readdir('dist/assets')).map(n=>'/assets/'+n)];
 const version='fm-'+createHash('sha256').update(assets.join('|')).digest('hex').slice(0,12);
 await writeFile('dist/sw.js',`const CACHE=${JSON.stringify(version)},FILES=${JSON.stringify(assets)};
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting())));

@@ -33,9 +33,9 @@ export function createApp(options={}){
  }else{
   app.use(express.json({limit:'6mb'}));
   const user=req=>{const h=hash(cookie(req,'fm_session')),s=sessions.get(h);if(!s||s.expires<Date.now()){sessions.delete(h);return null;}return s.user;};
-  const required=req=>user(req)||fail(401,'Connect your AltStack account to sync.');
-  const call=async(path,data)=>{const r=await net(social+'/api/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),signal:AbortSignal.timeout(15000)});const v=await r.json();if(!r.ok)fail(502,'AltStack sign-in is unavailable. Try again shortly.');return v;};
-  app.get('/api/me',(req,res)=>res.json({user:user(req),product:'F&M Journal'}));
+  const required=req=>user(req)||fail(401,'Connect your Cohnsoft account to sync.');
+  const call=async(path,data)=>{const r=await net(social+'/api/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),signal:AbortSignal.timeout(15000)});const v=await r.json();if(!r.ok)fail(502,'Cohnsoft sign-in is unavailable. Try again shortly.');return v;};
+  app.get('/api/me',(req,res)=>res.json({user:user(req),product:'Cohnsoft Journal'}));
   app.post('/api/auth/start',async(req,res)=>{
    const now=Date.now();for(const[k,v]of pairings)if(v.expires<now)pairings.delete(k);for(const[k,v]of sessions)if(v.expires<now)sessions.delete(k);
    if(pairings.size>1000)fail(429,'Sign-in is busy. Try again shortly.');
@@ -57,7 +57,7 @@ export function createApp(options={}){
   app.delete('/api/journal',(req,res)=>{const u=required(req);if(req.body?.confirmation!=='DELETE MY JOURNAL')fail(400,'Type DELETE MY JOURNAL to confirm.');store.remove(u.id);res.json({ok:true});});
   mountMcp(app,{store,required,origin});
  }
- app.get('/healthz',(req,res)=>res.json({ok:true,product:'F&M Journal',version:'1.0.0'}));
+ app.get('/healthz',(req,res)=>res.json({ok:true,product:'Cohnsoft Journal',version:'1.0.0'}));
  const root=options.staticDir||resolve('dist');
  app.use(express.static(root,{maxAge:0}));
  app.get('/downloads',async(req,res)=>{
@@ -69,5 +69,5 @@ export function createApp(options={}){
  return {app,store,sessions,close(){sessions.clear();pairings.clear();}};
 }
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
- const port=Number(process.env.PORT||3104),{app}=createApp();app.listen(port,'0.0.0.0',()=>console.log(`F&M Journal listening on ${port}`));
+ const port=Number(process.env.PORT||3104),{app}=createApp();app.listen(port,'0.0.0.0',()=>console.log(`Cohnsoft Journal listening on ${port}`));
 }
