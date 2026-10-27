@@ -62,7 +62,7 @@ export function createApp(options={}){
  }
  app.get('/healthz',(req,res)=>res.json({ok:true,product:'Vigil Journal',version:'1.0.0'}));
  const root=options.staticDir||resolve('dist');
- const index=(req,res)=>{if(!existsSync(join(root,'index.html')))return res.status(503).send('Build the client first.');let html=readFileSync(join(root,'index.html'),'utf8');if(base)html=html.replace('<head>','<head><base href="'+base+'/"><meta name="vigil-base" content="'+base+'">').replace(/(href|src)="\/(?!\/)/g,'$1="'+base+'/');res.type('html').send(html);};
+ const index=(req,res)=>{if(!existsSync(join(root,'index.html')))return res.status(503).send('Build the client first.');let html=readFileSync(join(root,'index.html'),'utf8');if(base)html=html.replace(/(href|src)="\/(?!\/)/g,'$1="'+base+'/').replace('<head>','<head><base href="'+base+'/"><meta name="vigil-base" content="'+base+'">');res.type('html').send(html);};
  app.get(['/','/index.html'],index);
  app.get('/manifest.webmanifest',(req,res,next)=>{if(!base)return next();const m=JSON.parse(readFileSync(join(root,'manifest.webmanifest'),'utf8'));m.start_url=base+'/';m.scope=base+'/';for(const i of m.icons||[])if(i.src?.startsWith('/'))i.src=base+i.src;res.type('application/manifest+json').send(m);});
  app.use(express.static(root,{maxAge:0,index:false}));

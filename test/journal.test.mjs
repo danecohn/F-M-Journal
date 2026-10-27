@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtempSync,readFileSync,readdirSync,rmSync} from 'node:fs';
+import {mkdtempSync,readFileSync,readdirSync,rmSync,mkdirSync,writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {createStore,emptyJournal} from '../server/store.mjs';
@@ -40,3 +40,5 @@ for(const base of ['', '/journal'])test('VigilTech '+(base||'root')+' sign-in, a
   assert.equal((await req('/api/connections',{cookie:bob})).v.connections.length,0);
  }finally{await new Promise(r=>server.close(r));instance.close();rmSync(dir,{recursive:true,force:true});}
 });
+
+test('hosted HTML resolves actual script assets beneath one journal prefix',async()=>{const dir=mkdtempSync(join(tmpdir(),'journal-html-')),web=join(dir,'web');mkdirSync(web);mkdirSync(join(web,'assets'));writeFileSync(join(web,'index.html'),'<html><head><script type="module" src="./assets/client.js"></script><link href="/mark.svg" rel="icon"></head><body></body></html>');writeFileSync(join(web,'assets/client.js'),'export const ready=true;');const app=createApp({env:{DATA_DIR:dir,DATA_ENCRYPTION_KEY:'ab'.repeat(32),PUBLIC_ORIGIN:'https://vigiltech.org/journal',PUBLIC_BASE_PATH:'/journal'},staticDir:web});const server=app.app.listen(0,'127.0.0.1');await new Promise(r=>server.once('listening',r));const root='http://127.0.0.1:'+server.address().port;try{const html=await(await fetch(root+'/journal/')).text();const base=html.match(/<base href="([^"]+)"/)[1],src=html.match(/src="([^"]+)"/)[1];assert.equal(base,'/journal/');const url=new URL(src,new URL(base,root));assert.equal(url.pathname,'/journal/assets/client.js');const asset=await fetch(url);assert.equal(asset.status,200);assert.match(asset.headers.get('content-type'),/javascript/);assert.match(await asset.text(),/ready=true/);assert.ok(html.includes('href="/journal/mark.svg"'));}finally{await new Promise(r=>server.close(r));app.close();rmSync(dir,{recursive:true,force:true});}});
